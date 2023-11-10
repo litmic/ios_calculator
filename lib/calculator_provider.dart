@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 enum Operation {
@@ -24,19 +26,30 @@ class CalculatorProvider extends ChangeNotifier {
       } else {
         result = num.toString();
       }
-      secNum = double.tryParse(result) ?? 0;
+      secNum = parseStringToDouble(result);
     } else {
       if (result.startsWith('0')) {
         result = num.toString();
       } else {
         result += num.toString();
       }
-      firstNum = double.tryParse(result) ?? 0;
+      firstNum = parseStringToDouble(result);
     }
+    showLogs('onNumPressed');
     notifyListeners();
   }
 
-  void onCommaPressed() {}
+  void onCommaPressed() {
+    if (result.contains(',')) return;
+    if (secNum != null) {
+      result = '$secNum,';
+    } else {
+      result = '$firstNum,';
+    }
+    result = removeTrailingZeros(result);
+    showLogs('onCommaPressed');
+    notifyListeners();
+  }
 
   void onChangeSignPressed() {
     if (secNum != null) {
@@ -47,6 +60,7 @@ class CalculatorProvider extends ChangeNotifier {
       result = firstNum.toString();
     }
     result = removeTrailingZeros(result);
+    showLogs('onChangeSignPressed');
     notifyListeners();
   }
 
@@ -55,6 +69,7 @@ class CalculatorProvider extends ChangeNotifier {
       onEqualsPressed();
     }
     this.operation = operation;
+    showLogs('onOperationPressed');
     notifyListeners();
   }
 
@@ -63,6 +78,7 @@ class CalculatorProvider extends ChangeNotifier {
     firstNum = null;
     secNum = null;
     operation = null;
+    showLogs('onACPressed');
     notifyListeners();
   }
 
@@ -70,6 +86,7 @@ class CalculatorProvider extends ChangeNotifier {
     if (operation == null) return;
     if (firstNum == null) return;
     secNum ??= firstNum;
+
     switch (operation!) {
       case Operation.addition:
         result = (firstNum! + secNum!).toString();
@@ -85,13 +102,30 @@ class CalculatorProvider extends ChangeNotifier {
         break;
     }
     result = removeTrailingZeros(result);
+    result = result.replaceAll('.', ',');
     operation = null;
     secNum = null;
-    firstNum = double.tryParse(result) ?? 0;
+    firstNum = parseStringToDouble(result);
+    showLogs('onEqualsPressed');
     notifyListeners();
   }
 
-  removeTrailingZeros(String n) {
+  String removeTrailingZeros(String n) {
     return n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+  }
+
+  double parseStringToDouble(String n) {
+    return double.tryParse(n.replaceAll(',', '.')) ?? 0;
+  }
+
+  String parseDoubleToString(double n) {
+    return n.toString().replaceAll('.', ',');
+  }
+
+  showLogs(String title) {
+    log(title);
+    log('firstNum: $firstNum');
+    log('secNum: $secNum');
+    log('result: $result');
   }
 }
