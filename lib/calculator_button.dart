@@ -24,7 +24,7 @@ class _CalculatorButtonState extends State<CalculatorButton> {
       color: widget.backgroundColor,
       child: InkWell(
         onTap: widget.onPressed,
-        splashColor: Colors.white,
+        splashColor: Colors.white.withOpacity(0.5),
         borderRadius: const BorderRadius.all(Radius.circular(45)),
         child: Container(
           height: MediaQuery.of(context).size.width * 0.2,

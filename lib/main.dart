@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ios_calculator/calculator_provider.dart';
 import 'package:ios_calculator/calculator_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +24,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: const CalculatorScreen(),
+      home: ChangeNotifierProvider<CalculatorProvider>(
+        create: (_) => CalculatorProvider(),
+        child: const CalculatorScreen(),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
