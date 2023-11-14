@@ -10,139 +10,148 @@ enum Operation {
 }
 
 class CalculatorProvider extends ChangeNotifier {
-  String result = '0'; //visible value on the user's calculator screen
-  double firstNum = 0; //the first entered number with default value of 0
-  double? secNum; //the second entered number
-  Operation? operation; //the operation enum
+  String result = '0';
+  double? firstNum;
+  double? secNum;
+  bool isFirstNumEnter = true;
+  bool isSecNumEnter = false;
+  bool isEqualsPressed = false;
+  Operation? operation;
 
   void onNumPressed(int num) {
-    //enter secNum if operation is set, otherwise enter the firstNum
-    if (operation != null) {
-      //if secNum is null set new number as result
-      if (secNum != null) {
-        //change the secNum if there is set value of 0, otherwise add new numbers
-        if (result.startsWith('0') && !result.contains(',')) {
-          result = num.toString();
-        } else if (result.startsWith('-0') && !result.contains(',')) {
-          result = '-$num';
-        } else {
-          result += num.toString();
-        }
-      } else {
+    if (isFirstNumEnter) {
+      if (firstNum == null) {
         result = num.toString();
-      }
-      secNum = parseStringToDouble(result); //parse new result to double
-    } else {
-      //change the firstNum if there is set value of 0, otherwise add new numbers
-      if (result.startsWith('0') && !result.contains(',')) {
+      } else if (result.startsWith('0') && !result.contains(',')) {
         result = num.toString();
       } else if (result.startsWith('-0') && !result.contains(',')) {
         result = '-$num';
       } else {
         result += num.toString();
       }
-      firstNum = parseStringToDouble(result); //parse new result to double
+      firstNum = parseStringToDouble(result);
+    }
+    if (isSecNumEnter) {
+      if (secNum == null) {
+        result = num.toString();
+      } else if (result.startsWith('0') && !result.contains(',')) {
+        result = num.toString();
+      } else if (result.startsWith('-0') && !result.contains(',')) {
+        result = '-$num';
+      } else {
+        result += num.toString();
+      }
+      secNum = parseStringToDouble(result);
     }
     showLogs('onNumPressed');
     notifyListeners();
   }
 
   void onCommaPressed() {
-    if (result.contains(',')) return; //return if there is already a comma
-    //if secNum is not null it means that it's entered, put comma to secNum, otherwise use firstNum
-    if (secNum != null) {
-      result = '$secNum,';
-    } else {
+    if (result.contains(',')) return;
+    if (isFirstNumEnter) {
       result = '$firstNum,';
     }
-    result = removeTrailingZeros(
-        result); //remove trailing zeros from the visible value
+    if (isSecNumEnter) {
+      result = '$secNum,';
+    }
+    result = removeTrailingZeros(result);
     showLogs('onCommaPressed');
     notifyListeners();
   }
 
   void onChangeSignPressed() {
-    if (secNum != null && secNum != 0) {
-      //change the sign of the number if secNum is entered and it's not 0
-      secNum = secNum! * -1;
-      result = secNum.toString();
-    } else if (secNum == 0) {
-      //change the 0 sign of the secNum
-      if (result.startsWith('-')) {
-        secNum = 0;
+    if (isFirstNumEnter) {
+      if (firstNum == 0 || firstNum == null) {
+        if (result.startsWith('-')) {
+          firstNum = 0;
+        } else {
+          firstNum = -0;
+        }
       } else {
-        secNum = -0;
+        firstNum = firstNum! * -1;
       }
-      result = secNum.toString();
-    } else if (operation != null) {
-      //if the operation is set and secNum is not null or 0 it means user would like to set secNum as firstNum with opposite sign
-      secNum = firstNum * -1;
-      result = secNum.toString();
-    } else if (firstNum == 0) {
-      //change the 0 sign of the firstNum
-      if (result.startsWith('-')) {
-        firstNum = 0;
-      } else {
-        firstNum = -0;
-      }
-      result = firstNum.toString();
-    } else {
-      //change the sign of the number if secNum is not entered
-      firstNum = firstNum * -1;
       result = firstNum.toString();
     }
-    result = removeTrailingZeros(
-        result); //remove trailing zeros from the visible value
+    if (isSecNumEnter) {
+      if (secNum == 0 || secNum == null) {
+        if (result.startsWith('-')) {
+          secNum = 0;
+        } else {
+          secNum = -0;
+        }
+      } else {
+        secNum = secNum! * -1;
+      }
+      result = secNum.toString();
+    }
+    result = removeTrailingZeros(result);
     showLogs('onChangeSignPressed');
     notifyListeners();
   }
 
   void onOperationPressed(Operation operation) {
-    //if secNum and operation is set calculate the result
-    if (secNum != null && this.operation != null) {
-      onEqualsPressed();
+    if (firstNum != null && secNum != null && !isEqualsPressed) {
+      onEqualsPressed(updateFirstNum: true);
+    } else if (isFirstNumEnter && firstNum == null && secNum == null) {
+      firstNum = 0;
+    } else if (isFirstNumEnter && secNum != null) {
+      firstNum = parseStringToDouble(result);
+      secNum = null;
     }
+    isSecNumEnter = true;
+    isFirstNumEnter = false;
+    isEqualsPressed = false;
     this.operation = operation;
     showLogs('onOperationPressed');
     notifyListeners();
   }
 
-  void onACPressed() {
-    //reset all to default values
-    result = '0';
-    firstNum = 0;
-    secNum = null;
-    operation = null;
-    showLogs('onACPressed');
-    notifyListeners();
+  void onEqualsPressed({bool updateFirstNum = false}) {
+    if (operation == null) return;
+    if (firstNum != null) {
+      secNum ??= firstNum;
+      switch (operation!) {
+        case Operation.addition:
+          result = (firstNum! + secNum!).toString();
+          break;
+        case Operation.substraction:
+          result = (firstNum! - secNum!).toString();
+          break;
+        case Operation.division:
+          result = (firstNum! / secNum!).toString();
+          break;
+        case Operation.multiplication:
+          result = (firstNum! * secNum!).toString();
+          break;
+      }
+      result = removeTrailingZeros(result);
+      result = result.replaceAll('.', ',');
+      if (updateFirstNum) {
+        isFirstNumEnter = false;
+        isSecNumEnter = true;
+        secNum = null;
+        firstNum = parseStringToDouble(result);
+      } else {
+        isFirstNumEnter = true;
+        isSecNumEnter = false;
+        firstNum = null;
+        isEqualsPressed = true;
+      }
+      showLogs('onEqualsPressed');
+      notifyListeners();
+    }
   }
 
-  void onEqualsPressed() {
-    if (operation == null) return;
-    secNum ??= firstNum; //if there is no secNum entered use it as firstNum
-
-    switch (operation!) {
-      case Operation.addition:
-        result = (firstNum + secNum!).toString();
-        break;
-      case Operation.substraction:
-        result = (firstNum - secNum!).toString();
-        break;
-      case Operation.division:
-        result = (firstNum / secNum!).toString();
-        break;
-      case Operation.multiplication:
-        result = (firstNum * secNum!).toString();
-        break;
-    }
-    result = removeTrailingZeros(
-        result); //remove trailing zeros from the visible value
-    result = result.replaceAll('.', ','); //show as x,x instead of x.x
-    //reset values of operation and secNum
-    operation = null;
+  void onACPressed() {
+    result = '0';
+    firstNum = null;
     secNum = null;
-    firstNum = parseStringToDouble(result); //replace firstNum as new result
-    showLogs('onEqualsPressed');
+    isFirstNumEnter = true;
+    isSecNumEnter = false;
+    isEqualsPressed = false;
+    operation = null;
+    showLogs('onACPressed');
     notifyListeners();
   }
 
@@ -150,8 +159,8 @@ class CalculatorProvider extends ChangeNotifier {
     return n.replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
   }
 
-  double parseStringToDouble(String n) {
-    return double.tryParse(n.replaceAll(',', '.')) ?? 0;
+  double? parseStringToDouble(String n) {
+    return double.tryParse(n.replaceAll(',', '.'));
   }
 
   String parseDoubleToString(double n) {
