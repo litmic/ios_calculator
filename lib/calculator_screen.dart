@@ -47,6 +47,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           ? calculatorProvider.onACPressed()
                           : calculatorProvider.onCPressed(),
                       backgroundColor: Style.lightGrey,
+                      iconPadding: 18,
                       icon: Text(
                         calculatorProvider.isAcAvaible ? 'AC' : 'C',
                         style: Style.testStyleActionButton,
@@ -55,12 +56,36 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     CalculatorButton(
                       onPressed: () => calculatorProvider.onChangeSignPressed(),
                       backgroundColor: Style.lightGrey,
-                      icon: const Icon(CupertinoIcons.plus_slash_minus),
+                      iconPadding: 25,
+                      icon: Text(
+                        String.fromCharCode(
+                            CupertinoIcons.plus_slash_minus.codePoint),
+                        style: TextStyle(
+                          inherit: false,
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800,
+                          fontFamily:
+                              CupertinoIcons.plus_slash_minus.fontFamily,
+                          package: CupertinoIcons.plus_slash_minus.fontPackage,
+                        ),
+                      ),
                     ),
                     CalculatorButton(
                       onPressed: () => calculatorProvider.onPercentPressed(),
                       backgroundColor: Style.lightGrey,
-                      icon: const Icon(CupertinoIcons.percent),
+                      iconPadding: 25,
+                      icon: Text(
+                        String.fromCharCode(CupertinoIcons.percent.codePoint),
+                        style: TextStyle(
+                          inherit: false,
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: CupertinoIcons.percent.fontFamily,
+                          package: CupertinoIcons.percent.fontPackage,
+                        ),
+                      ),
                     ),
                     CalculatorButton(
                       onPressed: () => calculatorProvider
@@ -70,13 +95,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                   calculatorProvider.secNum == null
                               ? Colors.white
                               : Style.orange,
-                      icon: Icon(
-                        CupertinoIcons.divide,
-                        color: calculatorProvider.operation ==
-                                    Operation.division &&
-                                calculatorProvider.secNum == null
-                            ? Style.orange
-                            : Colors.white,
+                      iconPadding: 25,
+                      icon: Text(
+                        String.fromCharCode(CupertinoIcons.divide.codePoint),
+                        style: TextStyle(
+                          inherit: false,
+                          color: calculatorProvider.operation ==
+                                      Operation.division &&
+                                  calculatorProvider.secNum == null
+                              ? Style.orange
+                              : Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: CupertinoIcons.divide.fontFamily,
+                          package: CupertinoIcons.divide.fontPackage,
+                        ),
                       ),
                     ),
                   ],
@@ -119,13 +152,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               calculatorProvider.secNum == null
                           ? Colors.white
                           : Style.orange,
-                      icon: Icon(
-                        CupertinoIcons.multiply,
-                        color: calculatorProvider.operation ==
-                                    Operation.multiplication &&
-                                calculatorProvider.secNum == null
-                            ? Style.orange
-                            : Colors.white,
+                      iconPadding: 25,
+                      icon: Text(
+                        String.fromCharCode(CupertinoIcons.multiply.codePoint),
+                        style: TextStyle(
+                          inherit: false,
+                          color: calculatorProvider.operation ==
+                                      Operation.multiplication &&
+                                  calculatorProvider.secNum == null
+                              ? Style.orange
+                              : Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: CupertinoIcons.multiply.fontFamily,
+                          package: CupertinoIcons.multiply.fontPackage,
+                        ),
                       ),
                     ),
                   ],
@@ -168,13 +209,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               calculatorProvider.secNum == null
                           ? Colors.white
                           : Style.orange,
-                      icon: Icon(
-                        CupertinoIcons.minus,
-                        color: calculatorProvider.operation ==
-                                    Operation.substraction &&
-                                calculatorProvider.secNum == null
-                            ? Style.orange
-                            : Colors.white,
+                      iconPadding: 25,
+                      icon: Text(
+                        String.fromCharCode(CupertinoIcons.minus.codePoint),
+                        style: TextStyle(
+                          inherit: false,
+                          color: calculatorProvider.operation ==
+                                      Operation.substraction &&
+                                  calculatorProvider.secNum == null
+                              ? Style.orange
+                              : Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: CupertinoIcons.minus.fontFamily,
+                          package: CupertinoIcons.minus.fontPackage,
+                        ),
                       ),
                     ),
                   ],
@@ -217,13 +266,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                   calculatorProvider.secNum == null
                               ? Colors.white
                               : Style.orange,
-                      icon: Icon(
-                        CupertinoIcons.plus,
-                        color: calculatorProvider.operation ==
-                                    Operation.addition &&
-                                calculatorProvider.secNum == null
-                            ? Style.orange
-                            : Colors.white,
+                      iconPadding: 25,
+                      icon: Text(
+                        String.fromCharCode(CupertinoIcons.add.codePoint),
+                        style: TextStyle(
+                          inherit: false,
+                          color: calculatorProvider.operation ==
+                                      Operation.addition &&
+                                  calculatorProvider.secNum == null
+                              ? Style.orange
+                              : Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: CupertinoIcons.add.fontFamily,
+                          package: CupertinoIcons.add.fontPackage,
+                        ),
                       ),
                     ),
                   ],
@@ -254,9 +311,17 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     CalculatorButton(
                       onPressed: () => calculatorProvider.onEqualsPressed(),
                       backgroundColor: Style.orange,
-                      icon: const Icon(
-                        CupertinoIcons.equal,
-                        color: Colors.white,
+                      iconPadding: 25,
+                      icon: Text(
+                        String.fromCharCode(CupertinoIcons.equal.codePoint),
+                        style: TextStyle(
+                          inherit: false,
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: CupertinoIcons.equal.fontFamily,
+                          package: CupertinoIcons.equal.fontPackage,
+                        ),
                       ),
                     ),
                   ],

@@ -5,12 +5,14 @@ class CalculatorButton extends StatefulWidget {
   final Color? backgroundColor;
   final Widget icon;
   final double? scaleWidth;
+  final double? iconPadding;
   const CalculatorButton(
       {super.key,
       required this.onPressed,
       this.backgroundColor,
       required this.icon,
-      this.scaleWidth});
+      this.scaleWidth,
+      this.iconPadding});
 
   @override
   State<CalculatorButton> createState() => _CalculatorButtonState();
@@ -33,8 +35,10 @@ class _CalculatorButtonState extends State<CalculatorButton> {
               (widget.scaleWidth ?? 1),
           color: Colors.transparent,
           child: Padding(
-            padding: const EdgeInsets.all(14.0),
-            child: FittedBox(child: widget.icon),
+            padding: EdgeInsets.all(widget.iconPadding ?? 14.0),
+            child: FittedBox(
+              child: widget.icon,
+            ),
           ),
         ),
       ),
