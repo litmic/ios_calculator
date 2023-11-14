@@ -50,10 +50,10 @@ class CalculatorProvider extends ChangeNotifier {
   void onCommaPressed() {
     if (result.contains(',')) return;
     if (isFirstNumEnter) {
-      result = '$firstNum,';
+      result = '${firstNum ??= 0},';
     }
     if (isSecNumEnter) {
-      result = '$secNum,';
+      result = '${secNum ??= 0},';
     }
     result = removeTrailingZeros(result);
     showLogs('onCommaPressed');
