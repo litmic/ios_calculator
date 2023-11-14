@@ -133,38 +133,37 @@ class CalculatorProvider extends ChangeNotifier {
 
   void onEqualsPressed({bool updateFirstNum = false}) {
     if (operation == null) return;
-    if (firstNum != null) {
-      secNum ??= firstNum;
-      switch (operation!) {
-        case Operation.addition:
-          result = (firstNum! + secNum!).toString();
-          break;
-        case Operation.substraction:
-          result = (firstNum! - secNum!).toString();
-          break;
-        case Operation.division:
-          result = (firstNum! / secNum!).toString();
-          break;
-        case Operation.multiplication:
-          result = (firstNum! * secNum!).toString();
-          break;
-      }
-      result = removeTrailingZeros(result);
-      result = result.replaceAll('.', ',');
-      if (updateFirstNum) {
-        isFirstNumEnter = false;
-        isSecNumEnter = true;
-        secNum = null;
-        firstNum = parseStringToDouble(result);
-      } else {
-        isFirstNumEnter = true;
-        isSecNumEnter = false;
-        firstNum = null;
-        isEqualsPressed = true;
-      }
-      showLogs('onEqualsPressed');
-      notifyListeners();
+    firstNum ??= parseStringToDouble(result);
+    secNum ??= firstNum;
+    switch (operation!) {
+      case Operation.addition:
+        result = (firstNum! + secNum!).toString();
+        break;
+      case Operation.substraction:
+        result = (firstNum! - secNum!).toString();
+        break;
+      case Operation.division:
+        result = (firstNum! / secNum!).toString();
+        break;
+      case Operation.multiplication:
+        result = (firstNum! * secNum!).toString();
+        break;
     }
+    result = removeTrailingZeros(result);
+    result = result.replaceAll('.', ',');
+    if (updateFirstNum) {
+      isFirstNumEnter = false;
+      isSecNumEnter = true;
+      secNum = null;
+      firstNum = parseStringToDouble(result);
+    } else {
+      isFirstNumEnter = true;
+      isSecNumEnter = false;
+      firstNum = null;
+      isEqualsPressed = true;
+    }
+    showLogs('onEqualsPressed');
+    notifyListeners();
   }
 
   void onACPressed() {
