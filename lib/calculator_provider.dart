@@ -90,6 +90,28 @@ class CalculatorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onPercentPressed() {
+    if (isFirstNumEnter) {
+      if (firstNum == null || firstNum == 0) {
+        return;
+      } else {
+        result = (firstNum! / 100).toString();
+      }
+      firstNum = parseStringToDouble(result);
+    }
+    if (isSecNumEnter) {
+      if (firstNum != null && (secNum == null || secNum == 0)) {
+        return;
+      } else {
+        result = ((secNum! / 100) * firstNum!).toString();
+      }
+      secNum = parseStringToDouble(result);
+    }
+    result = removeTrailingZeros(result);
+    showLogs('onPercentPressed');
+    notifyListeners();
+  }
+
   void onOperationPressed(Operation operation) {
     if (firstNum != null && secNum != null && !isEqualsPressed) {
       onEqualsPressed(updateFirstNum: true);

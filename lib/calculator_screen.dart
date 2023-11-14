@@ -65,7 +65,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       icon: const Icon(CupertinoIcons.plus_slash_minus),
                     ),
                     CalculatorButton(
-                      onPressed: () {},
+                      onPressed: () => calculatorProvider.onPercentPressed(),
                       backgroundColor: Style.lightGrey,
                       icon: const Icon(CupertinoIcons.percent),
                     ),
