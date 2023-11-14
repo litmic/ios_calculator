@@ -16,9 +16,11 @@ class CalculatorProvider extends ChangeNotifier {
   bool isFirstNumEnter = true;
   bool isSecNumEnter = false;
   bool isEqualsPressed = false;
+  bool isAcAvaible = true;
   Operation? operation;
 
   void onNumPressed(int num) {
+    isAcAvaible = false;
     if (isFirstNumEnter) {
       if (firstNum == null) {
         result = num.toString();
@@ -172,8 +174,22 @@ class CalculatorProvider extends ChangeNotifier {
     isFirstNumEnter = true;
     isSecNumEnter = false;
     isEqualsPressed = false;
+    isAcAvaible = true;
     operation = null;
     showLogs('onACPressed');
+    notifyListeners();
+  }
+
+  void onCPressed() {
+    isAcAvaible = true;
+    result = '0';
+    if (isFirstNumEnter) {
+      firstNum = 0;
+    }
+    if (isSecNumEnter) {
+      secNum = 0;
+    }
+    showLogs('onCPressed');
     notifyListeners();
   }
 

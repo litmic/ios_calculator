@@ -13,15 +13,6 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  late final CalculatorProvider _calculatorProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    _calculatorProvider =
-        Provider.of<CalculatorProvider>(context, listen: false);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,10 +43,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CalculatorButton(
-                      onPressed: () => calculatorProvider.onACPressed(),
+                      onPressed: () => calculatorProvider.isAcAvaible
+                          ? calculatorProvider.onACPressed()
+                          : calculatorProvider.onCPressed(),
                       backgroundColor: Style.lightGrey,
-                      icon: const Text(
-                        'AC',
+                      icon: Text(
+                        calculatorProvider.isAcAvaible ? 'AC' : 'C',
                         style: Style.testStyleActionButton,
                       ),
                     ),
