@@ -63,8 +63,13 @@ class CalculatorProvider extends ChangeNotifier {
   }
 
   void onChangeSignPressed() {
+    if (isEqualsPressed) {
+      firstNum = parseStringToDouble(result);
+    }
     if (isFirstNumEnter) {
-      if (firstNum == 0 || firstNum == null) {
+      if (firstNum == null) {
+        firstNum = -0;
+      } else if (firstNum == 0) {
         if (result.startsWith('-')) {
           firstNum = 0;
         } else {
@@ -76,7 +81,9 @@ class CalculatorProvider extends ChangeNotifier {
       result = firstNum.toString();
     }
     if (isSecNumEnter) {
-      if (secNum == 0 || secNum == null) {
+      if (secNum == null) {
+        secNum = -0;
+      } else if (secNum == 0) {
         if (result.startsWith('-')) {
           secNum = 0;
         } else {
@@ -143,7 +150,11 @@ class CalculatorProvider extends ChangeNotifier {
         result = (firstNum! - secNum!).toString();
         break;
       case Operation.division:
-        result = (firstNum! / secNum!).toString();
+        if (secNum == 0) {
+          result = 'Error';
+        } else {
+          result = (firstNum! / secNum!).toString();
+        }
         break;
       case Operation.multiplication:
         result = (firstNum! * secNum!).toString();
